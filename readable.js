@@ -1,20 +1,42 @@
-document.addEventListener('DOMContentLoaded', function() {
-  var checkPageButton = document.getElementById('readPage');
-  checkPageButton.addEventListener('click', function() {
+var Site = (function ($) {
 
-    chrome.tabs.getSelected(null, function(tab) {
-      d = document;
+  return function () {
+    var siteData = $(document),
+        articleText = "";
 
-      var f = d.createElement('form');
-      f.action = 'http://gtmetrix.com/analyze.html?bm';
-      f.method = 'post';
-      var i = d.createElement('input');
-      i.type = 'hidden';
-      i.name = 'url';
-      i.value = tab.url;
-      f.appendChild(i);
-      d.body.appendChild(f);
-      f.submit();
-    });
-  }, false);
-}, false);
+    function extractLongestText() {
+      
+    }
+
+    function stripPage() {
+      siteData.find('body').children().remove();
+    }
+
+    function removeClassesFromBody(){
+      siteData.find('body').prop('class','');
+    }
+
+
+  
+    return {
+      stripPage: stripPage,
+      removeClassesFromBody: removeClassesFromBody
+    }
+  
+  }
+})(jQuery);
+
+(function initialize() {
+  var site = new Site();
+
+  chrome.extension.onRequest.addListener(function(method, sender, sendResponse) {
+    if(method.action === "strip") {
+     site.stripPage();      
+    }
+    if(method.action === "removeClasses"){
+      site.removeClassesFromBody();
+    }
+  });
+
+})();
+

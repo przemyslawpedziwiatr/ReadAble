@@ -10,5 +10,13 @@
 	},
 	"permissions" : [
 		"activeTab"
-	]
+	],
+	  "content_scripts": [
+	    {
+	      "matches": [
+	        "<all_urls>"
+	      ],
+	      "js": ["sources/vendor/jquery.min.js", "readable.js"]
+	    }
+	  ]
 }
