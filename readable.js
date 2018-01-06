@@ -1,42 +1,28 @@
-var Site = (function ($) {
-
-  return function () {
-    var siteData = $(document),
-        articleText = "";
-
-    function extractLongestText() {
+var Readable = (function($, Modules) {
+  return function() {
+    let textExtractor = new Modules.TextExtractor(),
+      settings = new Modules.Settings(),
+      utilities = new Modules.Utilities(),
       
-    }
-
-    function stripPage() {
-      siteData.find('body').children().remove();
-    }
-
-    function removeClassesFromBody(){
-      siteData.find('body').prop('class','');
-    }
+      siteData = $(document),
+      articleText = [];
 
 
-  
-    return {
-      stripPage: stripPage,
-      removeClassesFromBody: removeClassesFromBody
+    this.stripPage = function() {
+      utilities.stopWebsite();
+      articleText = textExtractor.extractLongestText();
+      utilities.clearBody(siteData, articleText);
+      utilities.resetStylesheets(siteData);
+      settings.setDefaultStyles();
+      settings.addSettingsButtons();
     }
-  
+
+    this.run = function() {
+      this.stripPage();
+    }
   }
-})(jQuery);
 
-(function initialize() {
-  var site = new Site();
+})(jQuery, Modules);
 
-  chrome.extension.onRequest.addListener(function(method, sender, sendResponse) {
-    if(method.action === "strip") {
-     site.stripPage();      
-    }
-    if(method.action === "removeClasses"){
-      site.removeClassesFromBody();
-    }
-  });
-
-})();
-
+readable = new Readable();
+readable.run();

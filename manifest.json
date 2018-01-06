@@ -1,22 +1,40 @@
 {
 	"manifest_version": 2,
-	"name" : "ReadAble reading enhancement",
-	"description" : "Makes reading web articles a breeze!",
-	"version" : "1.0",
-
-	"browser_action" : {
-		"default_icon" : "assets/icon.png",
-		"default_popup" : "popup.html"
+	"name": "ReadAble reading enhancement",
+	"description": "Makes reading web articles a breeze!",
+	"version": "1.0",
+	"browser_action": {
+		"default_icon": "assets/icon.png"
 	},
-	"permissions" : [
-		"activeTab"
+	"permissions": [
+		"activeTab",
+		"background",
+		"storage",
+		"tabs",
+		"http://*/",
+		"https://*/"
 	],
-	  "content_scripts": [
-	    {
-	      "matches": [
-	        "<all_urls>"
-	      ],
-	      "js": ["sources/vendor/jquery.min.js", "readable.js"]
-	    }
-	  ]
+	"background": {
+		"scripts": [
+			"extension.js"
+		],
+		"persistent": true
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"<all_urls>"	
+			],
+			"js": [
+				"sources/vendor/jquery.min.js",
+				"modules.js",
+				"textextractor.js",
+				"utilities.js",
+				"settings.js"
+			],
+			"web_accessible_resources": [
+				"styles.css"
+			]
+		}
+	]
 }
